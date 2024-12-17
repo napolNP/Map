@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карта города</title>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=8636801a-d673-4f1c-899b-de8d7201ea93&lang=ru_RU" type="text/javascript"></script>
+    <style>
+        #map {
+            height: 600px; /* Высота карты */
+            width: 100%; /* Ширина карты */
+        }
+    </style>
+</head>
+<body>
+
+<h1>Карта города</h1>
+<div id="map"></div>
+
+<script>
+    // Инициализация карты
+    function init() {
+        var myMap = new ymaps.Map('map', {
+            center: [55.76352281410443, 37.66203899999997], // Координаты для Москвы
+            zoom: 10,
+            controls: ['routePanelControl'] // Добавление виджета маршрутов
+        });
+
+        // Удаление контролов
+        myMap.controls.remove('geolocationControl'); // удаляем геолокацию
+        myMap.controls.remove('searchControl'); // удаляем поиск
+        myMap.controls.remove('trafficControl'); // удаляем контроль трафика
+        myMap.controls.remove('typeSelector'); // удаляем тип карты
+        myMap.controls.remove('fullscreenControl'); // удаляем кнопку перехода в полноэкранный режим
+        myMap.controls.remove('zoomControl'); // удаляем контрол зуммирования
+        myMap.controls.remove('rulerControl'); // удаляем контрол правил
+        myMap.behaviors.disable(['scrollZoom']); // отключаем скролл карты (опционально)
+
+        // Добавление классической метки с данными о Гороховском переулке
+        var classicPlacemark = new ymaps.Placemark([55.76352281410443, 37.66203899999997], {
+            balloonContent: '<strong>Гороховский переулок</strong><br>Адрес: Гороховский пер., д.4<br>Телефон: <a href="tel:+79999999999">+7(999) 999-99-99</a>',
+        }, {
+            preset: 'islands#icon', // Стиль классической метки
+            iconColor: '#0095b6'  // Цвет классической метки
+        });
+
+        myMap.geoObjects.add(classicPlacemark); // Добавляем метку на карту
+
+        // Привязка события клика к метке
+        classicPlacemark.events.add('click', function (e) {
+            alert('Вы кликнули на метку: ' + classicPlacemark.properties.get('balloonContent'));
+        });
+    }
+
+    ymaps.ready(init);
+</script>
+
+</body>
+</html>
